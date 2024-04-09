@@ -16,7 +16,7 @@ import Server from "./server";
 // client.userAsset()
 //   .then(response => client.logger.log(response.data))
 //   .catch(error => client.logger.error(error))
-
-const server = new Server(8000)
+const PORT = +process.env.PORT || 8000;
+const server = new Server(PORT)
 
 server.startWwebsockets()
