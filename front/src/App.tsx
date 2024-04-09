@@ -22,7 +22,7 @@ function App() {
   const [isConnected, setIsConnected] = useState(false)
   const [gameStarted, setGameStarted] = useState(false)
   const gridSize: [number,number] = [7,6];
-  const WS_URL = 'ws://127.0.0.1:8000';
+  const WS_URL = process.env.WS_URL || "ws://127.0.0.1:8000";
   const websocket = useWebSocket(WS_URL, {
     share: true
   })
