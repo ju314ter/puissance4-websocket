@@ -35,15 +35,15 @@ const classes_1 = require("./classes");
 class Server {
     constructor(port) {
         this.port = port;
-        console.log('Construction du server sur le port ' + port);
+        console.log("Construction du server sur le port " + port);
     }
     start() {
         const app = (0, express_1.default)();
-        app.get('/', (req, res) => {
-            res.send('Salut les gens');
+        app.get("/", (req, res) => {
+            res.send("Salut les gens");
         });
         app.listen(this.port, function () {
-            console.log('serveur demarré');
+            console.log("serveur demarré");
         });
     }
     startWwebsockets() {
@@ -60,62 +60,69 @@ class Server {
             const player = connectedUsersCollection[uuid];
             const connection = connections[uuid];
             switch (payload.type) {
-                case 'game':
+                case "game":
                     handleGameMessage(payload.message, player, gameGridCollection, connections);
                     break;
-                case 'user':
+                case "user":
                     handleUserMessage(payload.message, player, gameGridCollection, connections, connection);
                     break;
                 default:
-                    console.log('Unrecognized message type');
+                    console.log("Unrecognized message type");
             }
         };
         const handleClose = (uuid) => {
             delete connectionsCollection[uuid];
             delete connectedUsersCollection[uuid];
-            console.log(uuid + ' disconnected');
+            console.log(uuid + " disconnected");
             //TODO : broadcast to client about loss of connection from a user
         };
         console.log("Démarrage websocket sur le port " + port);
-        app.get('/', (req, res) => {
-            res.send('Salut le monde');
+        app.get("/", (req, res) => {
+            res.send("Salut le monde");
         });
-        wssServer.on('connection', (connection, request) => {
+        wssServer.on("connection", (connection, request) => {
             console.log(request.url);
             const uuid = UUID.v4();
-            console.log('connected player with id ', uuid);
+            console.log("connected player with id ", uuid);
             connectionsCollection[uuid] = connection;
             connectedUsersCollection[uuid] = new classes_1.Player(uuid);
-            const msg = { type: 'user', message: 'connected' };
+            const msg = { type: "user", message: "connected" };
             connection.send(JSON.stringify(msg));
-            connection.on('message', (message) => handleMessage(message, uuid, connectionsCollection));
-            connection.on('close', () => handleClose(uuid));
+            connection.on("message", (message) => handleMessage(message, uuid, connectionsCollection));
+            connection.on("close", () => handleClose(uuid));
         });
         server.listen(port, function () {
-            console.log('serveur websocket demarré || port : ' + port);
+            console.log("serveur websocket demarré || port : " + port);
         });
     }
 }
 exports.default = Server;
 function handleGameMessage(message, player, gameGridCollection, connections) {
     const gameMessage = message;
-    console.log('New game event !', player.name, gameMessage);
-    if (gameMessage.key === 'token-drop') {
+    console.log("New game event !", player.name, gameMessage);
+    if (gameMessage.key === "token-drop") {
         // get user grid and drop token
-        const grid = gameGridCollection[player.currentGridId];
-        grid.dropToken(player, Number(gameMessage.value));
+        const grid = gameGridCollection[player.currentGridId] || null;
+        grid && grid.dropToken(player, Number(gameMessage.value));
         // check if that was a winning move
         if (grid.isLastDropWinningPlay()) {
-            console.log('winning play !');
-            const clientMsg = { type: 'winner', message: player.name };
-            connections[grid.firstPlayer.uuid] && connections[grid.firstPlayer.uuid].send(JSON.stringify(clientMsg));
-            connections[grid.secondPlayer.uuid] && connections[grid.secondPlayer.uuid].send(JSON.stringify(clientMsg));
+            console.log("winning play !");
+            const clientMsg = { type: "winner", message: player.name };
+            connections[grid.firstPlayer.uuid] &&
+                connections[grid.firstPlayer.uuid].send(JSON.stringify(clientMsg));
+            connections[grid.secondPlayer.uuid] &&
+                connections[grid.secondPlayer.uuid].send(JSON.stringify(clientMsg));
             // TODO : informs clients of result and delete grid from user state
         }
         // send message to both players with last grid position
-        const clientMsg = { type: 'token-drop', message: JSON.stringify(grid) };
-        connections[grid.firstPlayer.uuid] && connections[grid.firstPlayer.uuid].send(JSON.stringify(clientMsg));
-        connections[grid.secondPlayer.uuid] && connections[grid.secondPlayer.uuid].send(JSON.stringify(clientMsg));
+        const clientMsg = {
+            type: "token-drop",
+            message: JSON.stringify(grid),
+        };
+        connections[grid.firstPlayer.uuid] &&
+            connections[grid.firstPlayer.uuid].send(JSON.stringify(clientMsg));
+        connections[grid.secondPlayer.uuid] &&
+            connections[grid.secondPlayer.uuid].send(JSON.stringify(clientMsg));
         // if last play is a winning play, send information to client
     }
 }
@@ -140,12 +147,14 @@ function handleUserMessage(message, player, gameGridCollection, connections, con
                     grid.addSecondPlayer(player);
                     player.setCurrentGrid(grid.gridUuid);
                 }
-                ;
-                console.log('Adding second player to grid ', grid.gridUuid);
+                console.log("Adding second player to grid ", grid.gridUuid);
                 // si la grille est prête, envoyer les infos au client pour démarrer la partie
                 if (grid.gridReady) {
-                    console.log('Grid ready');
-                    const clientMsg = { type: 'token-drop', message: JSON.stringify(grid) };
+                    console.log("Grid ready");
+                    const clientMsg = {
+                        type: "token-drop",
+                        message: JSON.stringify(grid),
+                    };
                     if (connections[grid.secondPlayer.uuid])
                         connections[grid.secondPlayer.uuid].send(JSON.stringify(clientMsg));
                     if (connections[grid.firstPlayer.uuid])
@@ -159,9 +168,12 @@ function handleUserMessage(message, player, gameGridCollection, connections, con
             const newGrid = new classes_1.Grid(userMessage.gameInfos.gridSize, player, gridUuid);
             gameGridCollection[gridUuid] = newGrid;
             player.setCurrentGrid(newGrid.gridUuid);
-            const clientMsg = { type: 'token-drop', message: JSON.stringify(newGrid) };
+            const clientMsg = {
+                type: "token-drop",
+                message: JSON.stringify(newGrid),
+            };
             connection.send(JSON.stringify(clientMsg));
-            console.log('Game created, waiting for second player on grid', newGrid.gridUuid);
+            console.log("Game created, waiting for second player on grid", newGrid.gridUuid);
         }
     }
 }

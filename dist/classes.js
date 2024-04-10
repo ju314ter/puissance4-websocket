@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Grid = exports.Position = exports.Player = void 0;
 class Items {
     static getFirstItem() {
-        return 'Item 1';
+        return "Item 1";
     }
 }
 exports.default = Items;
@@ -19,8 +19,7 @@ class Player {
     setCurrentGrid(gridId) {
         this.currentGridId = gridId;
     }
-    play(col) {
-    }
+    play(col) { }
 }
 exports.Player = Player;
 class Position {
@@ -83,7 +82,7 @@ class Grid {
     // Retourne vrai si token drop ou faux si coup impossible
     dropToken(player, col) {
         if (player.uuid !== this.nextPlayer.uuid) {
-            console.log('another player tried to play, illegal move !');
+            console.log("another player tried to play, illegal move !");
             return false;
         }
         const column = this.grid[col];
@@ -103,7 +102,7 @@ class Grid {
             return true;
         }
         else {
-            console.log('La colonne est pleine');
+            console.log("La colonne est pleine");
             return false;
             //TODO : envoyer message erreur au client, colonne pleine coup impossible
         }
@@ -118,11 +117,19 @@ class Grid {
         const gridHeight = this.grid[0].length;
         const potentialsNeighbours = [
             xCoord - 1 >= 0 ? this.grid[xCoord - 1][yCoord] : undefined,
-            xCoord - 1 >= 0 && yCoord <= gridHeight ? this.grid[xCoord - 1][yCoord + 1] : undefined,
-            xCoord - 1 >= 0 && yCoord >= 0 ? this.grid[xCoord - 1][yCoord - 1] : undefined,
+            xCoord - 1 >= 0 && yCoord <= gridHeight
+                ? this.grid[xCoord - 1][yCoord + 1]
+                : undefined,
+            xCoord - 1 >= 0 && yCoord >= 0
+                ? this.grid[xCoord - 1][yCoord - 1]
+                : undefined,
             xCoord + 1 <= gridWidth ? this.grid[xCoord + 1][yCoord] : undefined,
-            xCoord + 1 <= gridWidth && yCoord <= gridHeight ? this.grid[xCoord + 1][yCoord + 1] : undefined,
-            xCoord + 1 <= gridWidth && yCoord >= 0 ? this.grid[xCoord + 1][yCoord - 1] : undefined,
+            xCoord + 1 <= gridWidth && yCoord <= gridHeight
+                ? this.grid[xCoord + 1][yCoord + 1]
+                : undefined,
+            xCoord + 1 <= gridWidth && yCoord >= 0
+                ? this.grid[xCoord + 1][yCoord - 1]
+                : undefined,
             yCoord >= 0 ? this.grid[xCoord][yCoord - 1] : undefined,
             yCoord <= gridHeight ? this.grid[xCoord][yCoord + 1] : undefined,
         ];
@@ -134,7 +141,7 @@ class Grid {
                 const { xCoord: xCoordN, yCoord: yCoordN } = neighbour;
                 return {
                     xDir: xCoordN - xCoord,
-                    yDir: yCoordN - yCoord
+                    yDir: yCoordN - yCoord,
                 };
             });
             //  b) compter le nombre de token successif dans chaque direction pour chaque voisin
@@ -143,11 +150,19 @@ class Grid {
                 let i = 1;
                 while (aligned) {
                     // On vérifie que les positions du jeton suivant sont biens inbound
-                    const xPosToCheck = xCoord + i * direction.xDir >= 0 && xCoord + i * direction.xDir <= gridWidth ? xCoord + i * direction.xDir : null;
-                    const yPosToCheck = yCoord + i * direction.yDir >= 0 && yCoord + i * direction.yDir <= gridHeight ? yCoord + i * direction.yDir : null;
-                    const nextPositionToCheck = xPosToCheck !== null && yPosToCheck !== null ? this.grid[xPosToCheck][yPosToCheck] : null;
-                    if (nextPositionToCheck && nextPositionToCheck.ownerUuid
-                        ===
+                    const xPosToCheck = xCoord + i * direction.xDir >= 0 &&
+                        xCoord + i * direction.xDir <= gridWidth
+                        ? xCoord + i * direction.xDir
+                        : null;
+                    const yPosToCheck = yCoord + i * direction.yDir >= 0 &&
+                        yCoord + i * direction.yDir <= gridHeight
+                        ? yCoord + i * direction.yDir
+                        : null;
+                    const nextPositionToCheck = xPosToCheck !== null && yPosToCheck !== null
+                        ? this.grid[xPosToCheck][yPosToCheck]
+                        : null;
+                    if (nextPositionToCheck &&
+                        nextPositionToCheck.ownerUuid ===
                             this.grid[xCoord][yCoord].ownerUuid) {
                         i++;
                     }
@@ -178,7 +193,7 @@ class Grid {
                 if (xDir === -1 && yDir === 1)
                     sumsOfDirectionsArray[3] += count;
             });
-            if (sumsOfDirectionsArray.some(sum => sum >= 3))
+            if (sumsOfDirectionsArray.some((sum) => sum >= 3))
                 hasWinner = true;
         }
         return hasWinner;

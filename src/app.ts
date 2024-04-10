@@ -9,7 +9,6 @@ import Server from "./server";
 // const apiKey = 'aLzxE4loVnMbF2WVpV1SPeiSP9mteNt6GufOYHrgNQBQ1JwYOS76LFhLlEOw931z'
 // const apiSecret = '2NJjltIvF5P4BoPNRj3CQWRPoVszZtxnxdrBYaKOPjI703vVgfDd6FD60Oygvf0s'
 
-
 // const client = new Spot(apiKey, apiSecret)
 
 //client.account().then(response => client.logger.log(response.data))
@@ -17,6 +16,6 @@ import Server from "./server";
 //   .then(response => client.logger.log(response.data))
 //   .catch(error => client.logger.error(error))
 const PORT = +process.env.PORT || 8000;
-const server = new Server(PORT)
+const server = new Server(PORT);
 
-server.startWwebsockets()
+server.startWwebsockets();
