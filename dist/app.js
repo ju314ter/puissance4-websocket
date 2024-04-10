@@ -16,5 +16,6 @@ const server_1 = __importDefault(require("./server"));
 // client.userAsset()
 //   .then(response => client.logger.log(response.data))
 //   .catch(error => client.logger.error(error))
-const server = new server_1.default(8000);
+const PORT = +process.env.PORT || 8000;
+const server = new server_1.default(PORT);
 server.startWwebsockets();

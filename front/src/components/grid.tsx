@@ -111,7 +111,7 @@ const Grid = ({size, playerName, websocket}: GridProps) => {
   
   return (
       <div className="grid-container">
-          {!gridState.gridReady && <p>En attente d\'un deuxième joueur</p>}
+          {!gridState.gridReady && <p>En attente d'un deuxième joueur</p>}
           {gridState.gridReady && gridState.nextPlayer && <p>A ton tour {gridState.nextPlayer.name} !</p>}
           <Playzone onDrop={onTokenDrop} gridSize={gridSize} disabled={false}></Playzone>
           <div className="grid">
@@ -121,7 +121,8 @@ const Grid = ({size, playerName, websocket}: GridProps) => {
                           return (
                           <PositionContainer key={`col-${indexCol}-row-${indexRow}`} color={
                             gridState.grid[indexCol][indexRow].owner === playerName ? 'rgb(255 125 125)' : 
-                            gridState.grid[indexCol][indexRow].owner !== null ? 'rgb(26 159 237)' : 'white'}>
+                            gridState.grid[indexCol][indexRow].owner !== null ? 'rgb(26 159 237)' : 'white'}
+                            className={gridState.grid[indexCol][indexRow].owner !== null ? 'drop-it' : 'position-container'}>
                           </PositionContainer>
                           )
                       })}

@@ -48,23 +48,31 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="app">
+      <header className="app-header">
         <h1>PUISSANCE 4</h1>
-        <p>{isConnected ? 'connecté': 'déconnecté'}</p>
+      </header>
+      <div className="app-status">
+        { isConnected ?
+          <div className="app-connected-indicator"></div>
+          :
+          <div className="app-disconnected-indicator"></div>
+        }
+      </div>
+      <main className="app-main">
         {!gameStarted && (
-          <div>
+          <div className="app-connection-form">
             <input type='text' placeholder='Entez votre nom de joueur' onChange={(form)=>setPlayerName(form.target.value)}></input>
             <input type='submit' value='Commencer une partie' onClick={startGame} disabled={!playerName}/>
           </div>
         )}
         {gameStarted && (
           <div>
-            <p>{playerName}</p>
             <Grid playerName={playerName} size={gridSize} websocket={websocket}></Grid>
           </div>
         )}
-      </header>
+      </main>
+      <div className="app-dashboard">{playerName}</div>
     </div>
   );
 }
