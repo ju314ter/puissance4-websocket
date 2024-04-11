@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const PlayerToken = styled.div.attrs<{
   position?: [number, number];
-  visibility?: number;
+  $isVisible: boolean;
   size: number;
 }>((props) => ({
   style: {
@@ -13,7 +13,7 @@ const PlayerToken = styled.div.attrs<{
           props.position[1] - 40
         }px, 0)`
       : "translate3d(0px, 0px)",
-    opacity: props.visibility || "0",
+    opacity: props.$isVisible ? "1" : "0",
     width: props.size + "vw",
     height: props.size + "vw",
   },
@@ -37,7 +37,7 @@ type PlayzoneProps = {
 const Playzone = ({ onDrop, gridSize, disabled, tokenSize }: PlayzoneProps) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [columnArray, setColumnArray] = useState([0]);
-  const [playerTokenVisibility, setPlayerTokenVisibility] = useState(0);
+  const [playerTokenVisibility, setPlayerTokenVisibility] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
   const element = elementRef.current;
   const playZoneWidth = element?.getBoundingClientRect().width || 1;
@@ -66,18 +66,22 @@ const Playzone = ({ onDrop, gridSize, disabled, tokenSize }: PlayzoneProps) => {
 
     element && element.addEventListener("mousemove", updateMousePosition);
     element &&
-      element.addEventListener("mouseenter", () => setPlayerTokenVisibility(1));
+      element.addEventListener("mouseenter", () =>
+        setPlayerTokenVisibility(true)
+      );
     element &&
-      element.addEventListener("mouseleave", () => setPlayerTokenVisibility(0));
+      element.addEventListener("mouseleave", () =>
+        setPlayerTokenVisibility(false)
+      );
     return () => {
       element && element.removeEventListener("mousemove", updateMousePosition);
       element &&
         element.removeEventListener("mouseenter", () =>
-          setPlayerTokenVisibility(1)
+          setPlayerTokenVisibility(true)
         );
       element &&
         element.removeEventListener("mouseleave", () =>
-          setPlayerTokenVisibility(0)
+          setPlayerTokenVisibility(false)
         );
     };
   }, [elementRef, element]);
@@ -103,7 +107,7 @@ const Playzone = ({ onDrop, gridSize, disabled, tokenSize }: PlayzoneProps) => {
       <PlayerToken
         size={tokenSize}
         position={[mousePosition.x, mousePosition.y]}
-        visibility={playerTokenVisibility}
+        $isVisible={playerTokenVisibility && !disabled ? true : false}
       ></PlayerToken>
     </div>
   );

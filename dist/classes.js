@@ -116,8 +116,6 @@ class Grid {
         const { xCoord, yCoord, owner } = this.lastPlayedPosition;
         const gridWidth = this.grid.length;
         const gridHeight = this.grid[0].length;
-        console.log(this.grid[xCoord + 1]);
-        console.log(xCoord + 1, yCoord);
         const potentialsNeighbours = [
             xCoord - 1 >= 0 ? this.grid[xCoord - 1][yCoord] : undefined,
             xCoord - 1 >= 0 && yCoord < gridHeight
@@ -154,13 +152,15 @@ class Grid {
                 while (aligned) {
                     // On vérifie que les positions du jeton suivant sont biens inbound
                     const xPosToCheck = xCoord + i * direction.xDir >= 0 &&
-                        xCoord + i * direction.xDir <= gridWidth
+                        xCoord + i * direction.xDir < gridWidth
                         ? xCoord + i * direction.xDir
                         : null;
                     const yPosToCheck = yCoord + i * direction.yDir >= 0 &&
-                        yCoord + i * direction.yDir <= gridHeight
+                        yCoord + i * direction.yDir < gridHeight
                         ? yCoord + i * direction.yDir
                         : null;
+                    // Bug here sometimes
+                    console.log("x/y/this.grid[x]", xPosToCheck, yPosToCheck, this.grid[xPosToCheck]);
                     const nextPositionToCheck = xPosToCheck !== null && yPosToCheck !== null
                         ? this.grid[xPosToCheck][yPosToCheck]
                         : null;

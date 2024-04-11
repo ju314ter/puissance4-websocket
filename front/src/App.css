@@ -135,6 +135,10 @@
   max-height: 90px;
 }
 
+.drop-it {
+  animation: bounce-in-top 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
 .app-dashboard {
   display: flex;
   justify-content: center;

@@ -58,6 +58,7 @@ type GridProps = {
 };
 const Grid = ({ size, playerName, websocket }: GridProps) => {
   const [gridSize, setGridSize] = useState([0, 0]);
+  const [winner, setWinner] = useState<string | null>(null);
   const [gridState, setGridState] = useState<GridState>({
     firstPlayer: {
       currentGridId: "",
@@ -98,7 +99,14 @@ const Grid = ({ size, playerName, websocket }: GridProps) => {
     }
 
     if (clientMsg && clientMsg.type === "winner") {
-      alert(`${clientMsg.message} is the WINNER !`);
+      setWinner(`${clientMsg.message}`);
+      setTimeout(
+        () =>
+          alert(
+            `${clientMsg.message} is the WINNER ! \n Recharge pour créer une nouvelle partie`
+          ),
+        500
+      );
     }
   }, [websocket.lastJsonMessage]);
 
@@ -113,13 +121,13 @@ const Grid = ({ size, playerName, websocket }: GridProps) => {
   return (
     <div className="grid-container">
       {!gridState.gridReady && <p>En attente d'un deuxième joueur</p>}
-      {gridState.gridReady && gridState.nextPlayer && (
+      {!winner && gridState.gridReady && gridState.nextPlayer && (
         <p>A ton tour {gridState.nextPlayer.name} !</p>
       )}
       <Playzone
         onDrop={onTokenDrop}
         gridSize={gridSize}
-        disabled={false}
+        disabled={!!winner || gridState.nextPlayer.name !== playerName}
         tokenSize={Math.floor(75 / gridSize[0])}
       ></Playzone>
       <div className="grid">

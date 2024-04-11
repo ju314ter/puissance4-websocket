@@ -134,7 +134,6 @@ export class Grid {
     }
     const column = this.grid[col];
     const lastEmptyPosition = getLastEmptyPositionInCol(column);
-    console.log(this.grid[col][lastEmptyPosition], lastEmptyPosition);
     if (lastEmptyPosition >= 0) {
       this.grid[col][lastEmptyPosition].isEmpty = false;
       this.grid[col][lastEmptyPosition].ownerUuid = player.uuid;
@@ -211,14 +210,15 @@ export class Grid {
           // On vérifie que les positions du jeton suivant sont biens inbound
           const xPosToCheck =
             xCoord + i * direction.xDir >= 0 &&
-            xCoord + i * direction.xDir <= gridWidth
+            xCoord + i * direction.xDir < gridWidth
               ? xCoord + i * direction.xDir
               : null;
           const yPosToCheck =
             yCoord + i * direction.yDir >= 0 &&
-            yCoord + i * direction.yDir <= gridHeight
+            yCoord + i * direction.yDir < gridHeight
               ? yCoord + i * direction.yDir
               : null;
+
           const nextPositionToCheck =
             xPosToCheck !== null && yPosToCheck !== null
               ? this.grid[xPosToCheck][yPosToCheck]
