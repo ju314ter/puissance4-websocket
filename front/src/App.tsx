@@ -52,15 +52,15 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
+        <div className="app-status">
+          {isConnected ? (
+            <div className="app-connected-indicator"></div>
+          ) : (
+            <div className="app-disconnected-indicator"></div>
+          )}
+        </div>
         <h1>PUISSANCE 4</h1>
       </header>
-      <div className="app-status">
-        {isConnected ? (
-          <div className="app-connected-indicator"></div>
-        ) : (
-          <div className="app-disconnected-indicator"></div>
-        )}
-      </div>
       <main className="app-main">
         {!gameStarted && (
           <div className="app-connection-form">

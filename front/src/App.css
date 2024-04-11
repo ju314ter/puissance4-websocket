@@ -1,22 +1,27 @@
 @import "./animations.css";
 @import "./App-mobile.css";
 
-.app {
-  display: grid;
-  grid-template-columns: 0.5fr 1fr 0.5fr;
-  grid-template-rows: 0.1fr 1fr 0.3fr;
-  height: 100vh;
+.html {
   background-color: #eaeaea;
+}
+
+.app {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
   font-family: "Roboto";
 }
 
 .app-header {
-  grid-area: 1 / 2 / 2 / 3;
+  display: flex;
   text-align: center;
 }
 
-.status {
-  grid-area: 1 / 1 / 2 / 2;
+.app-status {
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
 }
 
 .app-connected-indicator {
@@ -58,7 +63,7 @@
 }
 
 .app-main {
-  grid-area: 2 / 2 / 3 / 3;
+  width: 80vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,14 +101,17 @@
   background-color: #eaeaea;
   border: none;
   outline: none;
+  padding: 2px;
   box-shadow:
     5px 5px 10px rgba(0, 0, 0, 0.15),
     -5px -5px 10px rgba(255, 255, 255, 1);
   width: 100%;
-  height: 50vh;
   padding-top: 25px;
   padding-bottom: 15px;
   border-radius: 30px;
+  max-height: 60vh;
+  min-height: 200px;
+  max-width: 720px;
 }
 
 .grid-play-zone {
@@ -112,6 +120,7 @@
   background: transparent;
   overflow: hidden;
   cursor: none;
+  max-width: 720px;
 }
 
 .grid-row-container {
@@ -120,9 +129,15 @@
   justify-content: space-evenly;
 }
 
+.position-container {
+  margin: 0.2em 0;
+  max-width: 90px;
+  max-height: 90px;
+}
+
 .app-dashboard {
-  grid-area: 3 / 2 / 4 / 3;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 150px;
 }

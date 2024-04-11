@@ -35,18 +35,20 @@ type GridState = {
   lastPlayedPosition: Position;
 };
 
-const PositionContainer = styled.div.attrs<{ color: string }>((props) => ({
-  style: {
-    backgroundColor: props.color,
-  },
-}))`
+const PositionContainer = styled.div.attrs<{ color: string; size: number }>(
+  (props) => ({
+    style: {
+      backgroundColor: props.color,
+      width: props.size + "vw",
+      height: props.size + "vw",
+    },
+  })
+)`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
 `;
 
 type GridProps = {
@@ -118,6 +120,7 @@ const Grid = ({ size, playerName, websocket }: GridProps) => {
         onDrop={onTokenDrop}
         gridSize={gridSize}
         disabled={false}
+        tokenSize={Math.floor(75 / gridSize[0])}
       ></Playzone>
       <div className="grid">
         {gridState.grid.length > 0 &&
@@ -133,18 +136,19 @@ const Grid = ({ size, playerName, websocket }: GridProps) => {
                       return (
                         <PositionContainer
                           key={`col-${indexCol}-row-${indexRow}`}
+                          size={Math.floor(75 / gridSize[0])}
                           color={
                             gridState.grid[indexCol][indexRow].owner ===
                             playerName
-                              ? "rgb(255 125 125)"
+                              ? "rgb(26 159 237)"
                               : gridState.grid[indexCol][indexRow].owner !==
                                   null
-                                ? "rgb(26 159 237)"
+                                ? "rgb(255 125 125)"
                                 : "white"
                           }
                           className={
                             gridState.grid[indexCol][indexRow].owner !== null
-                              ? "drop-it"
+                              ? "drop-it position-container"
                               : "position-container"
                           }
                         ></PositionContainer>

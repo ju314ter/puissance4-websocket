@@ -87,7 +87,8 @@ class Grid {
         }
         const column = this.grid[col];
         const lastEmptyPosition = getLastEmptyPositionInCol(column);
-        if (lastEmptyPosition > 0) {
+        console.log(this.grid[col][lastEmptyPosition], lastEmptyPosition);
+        if (lastEmptyPosition >= 0) {
             this.grid[col][lastEmptyPosition].isEmpty = false;
             this.grid[col][lastEmptyPosition].ownerUuid = player.uuid;
             this.grid[col][lastEmptyPosition].owner = player.name;
@@ -115,23 +116,25 @@ class Grid {
         const { xCoord, yCoord, owner } = this.lastPlayedPosition;
         const gridWidth = this.grid.length;
         const gridHeight = this.grid[0].length;
+        console.log(this.grid[xCoord + 1]);
+        console.log(xCoord + 1, yCoord);
         const potentialsNeighbours = [
             xCoord - 1 >= 0 ? this.grid[xCoord - 1][yCoord] : undefined,
-            xCoord - 1 >= 0 && yCoord <= gridHeight
+            xCoord - 1 >= 0 && yCoord < gridHeight
                 ? this.grid[xCoord - 1][yCoord + 1]
                 : undefined,
             xCoord - 1 >= 0 && yCoord >= 0
                 ? this.grid[xCoord - 1][yCoord - 1]
                 : undefined,
-            xCoord + 1 <= gridWidth ? this.grid[xCoord + 1][yCoord] : undefined,
-            xCoord + 1 <= gridWidth && yCoord <= gridHeight
+            xCoord + 1 < gridWidth ? this.grid[xCoord + 1][yCoord] : undefined,
+            xCoord + 1 < gridWidth && yCoord < gridHeight
                 ? this.grid[xCoord + 1][yCoord + 1]
                 : undefined,
-            xCoord + 1 <= gridWidth && yCoord >= 0
+            xCoord + 1 < gridWidth && yCoord >= 0
                 ? this.grid[xCoord + 1][yCoord - 1]
                 : undefined,
             yCoord >= 0 ? this.grid[xCoord][yCoord - 1] : undefined,
-            yCoord <= gridHeight ? this.grid[xCoord][yCoord + 1] : undefined,
+            yCoord < gridHeight ? this.grid[xCoord][yCoord + 1] : undefined,
         ];
         const neighbours = potentialsNeighbours.filter((pos) => pos && pos.owner === owner);
         let hasWinner = false;
